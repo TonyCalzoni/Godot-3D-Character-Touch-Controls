@@ -1,0 +1,53 @@
+[gd_scene load_steps=4 format=3 uid="uid://cpvv3bpftnf36"]
+
+[ext_resource type="Script" path="res://Scripts/test_area.gd" id="1_j24bi"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_ntndg"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_l28ij"]
+albedo_color = Color(0.661986, 0.313666, 0.233371, 1)
+
+[node name="WorldSpace" type="Node3D"]
+script = ExtResource("1_j24bi")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+disable_mode = 1
+physics_material_override = SubResource("PhysicsMaterial_ntndg")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="StaticBody3D"]
+gi_mode = 2
+use_collision = true
+size = Vector3(30, 1, 30)
+material = SubResource("StandardMaterial3D_l28ij")
+
+[node name="Lights" type="Node3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+
+[node name="OmniLight3D" type="OmniLight3D" parent="StaticBody3D/Lights"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 2, -10)
+light_color = Color(1, 1, 0.584314, 1)
+light_energy = 10.0
+light_indirect_energy = 5.0
+omni_range = 15.0
+
+[node name="OmniLight3D3" type="OmniLight3D" parent="StaticBody3D/Lights"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 2, 10)
+light_color = Color(1, 1, 0.584314, 1)
+light_energy = 10.0
+light_indirect_energy = 5.0
+omni_range = 15.0
+
+[node name="OmniLight3D2" type="OmniLight3D" parent="StaticBody3D/Lights"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 2, -10)
+light_color = Color(1, 1, 0.584314, 1)
+light_energy = 10.0
+light_indirect_energy = 5.0
+omni_range = 15.0
+
+[node name="OmniLight3D4" type="OmniLight3D" parent="StaticBody3D/Lights"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 2, 10)
+light_color = Color(1, 1, 0.584314, 1)
+light_energy = 10.0
+light_indirect_energy = 5.0
+omni_range = 15.0

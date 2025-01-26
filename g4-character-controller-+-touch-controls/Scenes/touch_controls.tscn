@@ -1,0 +1,86 @@
+[gd_scene load_steps=10 format=3 uid="uid://bboojpru5ybhy"]
+
+[ext_resource type="Texture2D" uid="uid://j36ym6cnpt2g" path="res://Resources/G4-Ultimate-Touch-Joypad/touch_control_materials/pause_button.png" id="1_drusa"]
+[ext_resource type="Texture2D" uid="uid://b48t4xyy1sx4t" path="res://Resources/G4-Ultimate-Touch-Joypad/touch_control_materials/pause_button_active.png" id="2_52rbg"]
+[ext_resource type="Texture2D" uid="uid://djjmor6xgy5uu" path="res://Resources/G4-Ultimate-Touch-Joypad/touch_control_materials/analog_directional_circle.png" id="3_ouq0g"]
+[ext_resource type="Texture2D" uid="uid://e8x57phqorru" path="res://Resources/G4-Ultimate-Touch-Joypad/touch_control_materials/analog_directional_stick_inactive.png" id="4_dibvr"]
+[ext_resource type="Texture2D" uid="uid://d37msfk7y370n" path="res://Resources/G4-Ultimate-Touch-Joypad/touch_control_materials/analog_directional_stick_active.png" id="5_on00y"]
+[ext_resource type="Script" path="res://Scripts/analog_directional_stick.gd" id="6_4olvw"]
+[ext_resource type="Script" path="res://Scripts/analog_directional_v_oval_stick.gd" id="7_f5ka8"]
+[ext_resource type="Script" path="res://Scripts/analog_directional_h_oval_stick.gd" id="8_sp7ui"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_lmyg2"]
+radius = 150.0
+
+[node name="TouchControls" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PauseTouchScreenButton" type="TouchScreenButton" parent="."]
+position = Vector2(2, 2)
+scale = Vector2(0.1, 0.1)
+texture_normal = ExtResource("1_drusa")
+texture_pressed = ExtResource("2_52rbg")
+action = "ui_end"
+
+[node name="AnalogDirectionalCircle" type="Sprite2D" parent="."]
+position = Vector2(156, 646)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("3_ouq0g")
+
+[node name="Node2D" type="Node2D" parent="AnalogDirectionalCircle"]
+position = Vector2(-150, -145)
+scale = Vector2(4, 4)
+
+[node name="AnalogDirectionalStick" type="TouchScreenButton" parent="AnalogDirectionalCircle/Node2D"]
+scale = Vector2(0.25, 0.25)
+texture_normal = ExtResource("4_dibvr")
+texture_pressed = ExtResource("5_on00y")
+shape = SubResource("CircleShape2D_lmyg2")
+script = ExtResource("6_4olvw")
+
+[node name="AnalogDirectionalVOval" type="Sprite2D" parent="."]
+position = Vector2(1162, 643)
+scale = Vector2(0.125, 0.25)
+texture = ExtResource("3_ouq0g")
+
+[node name="Node2D" type="Node2D" parent="AnalogDirectionalVOval"]
+position = Vector2(-150, -145)
+scale = Vector2(4, 4)
+
+[node name="AnalogDirectionalVOvalStick" type="TouchScreenButton" parent="AnalogDirectionalVOval/Node2D"]
+position = Vector2(-38.5, 0.25)
+scale = Vector2(0.5, 0.25)
+texture_normal = ExtResource("4_dibvr")
+texture_pressed = ExtResource("5_on00y")
+shape = SubResource("CircleShape2D_lmyg2")
+script = ExtResource("7_f5ka8")
+upMove = "cam_up"
+downMove = "cam_down"
+
+[node name="AnalogDirectionalHOval" type="Sprite2D" parent="."]
+position = Vector2(1162, 436)
+scale = Vector2(0.25, 0.125)
+texture = ExtResource("3_ouq0g")
+
+[node name="Node2D" type="Node2D" parent="AnalogDirectionalHOval"]
+position = Vector2(-150, -145)
+scale = Vector2(4, 4)
+
+[node name="AnalogDirectionalHOvalStick" type="TouchScreenButton" parent="AnalogDirectionalHOval/Node2D"]
+position = Vector2(1.5, -39.75)
+scale = Vector2(0.25, 0.5)
+texture_normal = ExtResource("4_dibvr")
+texture_pressed = ExtResource("5_on00y")
+shape = SubResource("CircleShape2D_lmyg2")
+script = ExtResource("8_sp7ui")
+rightMove = "cam_right"
+leftMove = "cam_left"
+
+[connection signal="released" from="AnalogDirectionalCircle/Node2D/AnalogDirectionalStick" to="AnalogDirectionalCircle/Node2D/AnalogDirectionalStick" method="_released"]
+[connection signal="released" from="AnalogDirectionalVOval/Node2D/AnalogDirectionalVOvalStick" to="AnalogDirectionalVOval/Node2D/AnalogDirectionalVOvalStick" method="_released"]
+[connection signal="released" from="AnalogDirectionalHOval/Node2D/AnalogDirectionalHOvalStick" to="AnalogDirectionalHOval/Node2D/AnalogDirectionalHOvalStick" method="_released"]
