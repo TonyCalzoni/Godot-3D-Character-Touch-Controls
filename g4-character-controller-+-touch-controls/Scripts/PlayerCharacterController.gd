@@ -9,7 +9,6 @@ class_name PlayerCharacterController
 @export var camera_object:NodePath
 @export var air_run_time:float = 0.25
 
-
 enum state{WALK,RUN,JUMP,FALL,IDLE,ATTACK}
 @warning_ignore("unused_signal") # Silences the "UNUSED_SIGNAL" warning in debugger
 signal change_state(state)
@@ -55,9 +54,7 @@ func _do_input_movement(delta):
 	movement = Vector3.ZERO;
 	#get directional input
 	if ! state.RUN in locked:
-		var vertical = Input.get_action_strength("ui_up") - Input.get_action_strength("ui_down")
-		var horizontal = Input.get_action_strength("ui_left") - Input.get_action_strength("ui_right")
-		control_direction = Vector2(horizontal,vertical).normalized()
+		control_direction = Input.get_vector("ui_right","ui_left","ui_down","ui_up")#*0.1
 	#save that directional input in case we need it later
 	if control_direction.length()>0.1:
 		last_facing = control_direction
@@ -66,6 +63,7 @@ func _do_input_movement(delta):
 		rotation.y = (last_facing*Vector2(-1,1)).rotated(PI*1.5).angle()+camera.rotation.y
 		var camera_relative = Vector3(0,0,runspeed*control_direction.length()).rotated(Vector3.UP,rotation.y)
 		movement += camera_relative
+		
 	#jumping make go up
 	if jumptime > 0:
 		jumptime -= delta

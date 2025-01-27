@@ -5,12 +5,16 @@ extends Node3D
 @export var invertX:bool = false
 @export var invertY:bool = false
 @export var capture_mouse: bool = false
-#@export var use_mouse_click: bool = false
+@export var use_mouse_click: bool = false
+@export var mouse_click_to_use: MouseButton = MOUSE_BUTTON_LEFT
 @export var capture_joypad: bool = false
 @export var use_touch_stick: bool = true
+@export var max_x_rot: float = 45
+@export var min_x_rot: float = -75
 
 var follow:Node3D
 var lookv:Vector2
+var _mouse_clicked = false
 
 
 # Called when the node enters the scene tree for the first time.
@@ -22,21 +26,29 @@ func _ready():
 
 
 func _input(event):
-	if (event is InputEventMouseMotion) and capture_mouse:
-		lookv = Input.get_last_mouse_velocity()*0.00001
-	if (event is InputEventJoypadMotion) and capture_joypad:
-		lookv = Input.get_vector("cam_left","cam_right","cam_up","cam_down")*0.1
+	if (event is InputEventMouseButton) and (use_mouse_click):
+		if (event.button_index == mouse_click_to_use):
+			_mouse_clicked = event.pressed
+	elif (event is InputEventMouseMotion):
+		if (capture_mouse):
+			lookv = event.velocity*0.00001
+		elif (_mouse_clicked):
+			lookv = event.screen_velocity*0.0001
 	pass
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	if use_touch_stick:
+	if (use_touch_stick) or (capture_joypad):
 		lookv = Input.get_vector("cam_left","cam_right","cam_up","cam_down")*0.1
+		# Disable "Use Touch Stick" if you want to use mouse input for looking
 	
-	rotate_y(lookv.x if invertX else lookv.x*-1)
-	rotate_object_local(Vector3.LEFT,(lookv.y if invertY else lookv.y*-1))
-	rotation.x = clamp(rotation.x, -15, 15)
+	rotate_y(lookv.x if invertX else lookv.x*-1) # left/right
+	
+	if (rotation_degrees.x < max_x_rot) and Input.is_action_pressed("cam_down"):
+		rotate_object_local(Vector3.LEFT,(lookv.y if invertY else lookv.y*-1))
+	elif (rotation_degrees.x > min_x_rot) and Input.is_action_pressed("cam_up"):
+		rotate_object_local(Vector3.LEFT,(lookv.y if invertY else lookv.y*-1))
 	
 	if follow != null:
 		var goto = follow.position+Vector3(0,1,0)

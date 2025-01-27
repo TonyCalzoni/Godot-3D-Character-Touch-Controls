@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://bboojpru5ybhy"]
+[gd_scene load_steps=11 format=3 uid="uid://bboojpru5ybhy"]
 
 [ext_resource type="Texture2D" uid="uid://j36ym6cnpt2g" path="res://Resources/G4-Ultimate-Touch-Joypad/touch_control_materials/pause_button.png" id="1_drusa"]
 [ext_resource type="Texture2D" uid="uid://b48t4xyy1sx4t" path="res://Resources/G4-Ultimate-Touch-Joypad/touch_control_materials/pause_button_active.png" id="2_52rbg"]
@@ -8,6 +8,31 @@
 [ext_resource type="Script" path="res://Scripts/analog_directional_stick.gd" id="6_4olvw"]
 [ext_resource type="Script" path="res://Scripts/analog_directional_v_oval_stick.gd" id="7_f5ka8"]
 [ext_resource type="Script" path="res://Scripts/analog_directional_h_oval_stick.gd" id="8_sp7ui"]
+
+[sub_resource type="GDScript" id="GDScript_h3iyw"]
+resource_name = "touchControlResizer"
+script/source = "extends Control
+
+var x_scale = 1.0
+var y_scale = 1.0
+var scale_ratio = Vector2(x_scale,y_scale)
+@export var default_size = Vector2(1280,800)
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	pass # Replace with function body.
+
+func _on_resized() -> void:
+	scale_ratio = Vector2(self.size.x / default_size.x, self.size.y / default_size.y)
+	var _children = self.get_children(true)
+	for i in range(0, _children.size()):
+		if _children[i].name.contains(\"Anchor\"):
+			_children[i].scale = scale_ratio
+			var _stick = _children[i].find_child(\"*Stick\", true, true)
+			if _stick != null:
+				_stick.click_radius = _stick.click_radius * x_scale
+	return
+"
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_lmyg2"]
 radius = 150.0
@@ -19,6 +44,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = SubResource("GDScript_h3iyw")
 
 [node name="AnalogCircleAnchor" type="Control" parent="."]
 layout_mode = 1
@@ -120,6 +146,10 @@ texture_normal = ExtResource("1_drusa")
 texture_pressed = ExtResource("2_52rbg")
 action = "ui_end"
 
+[connection signal="resized" from="." to="." method="_on_resized"]
+[connection signal="pressed" from="AnalogCircleAnchor/AnalogDirectionalCircle/Node2D/AnalogDirectionalStick" to="AnalogCircleAnchor/AnalogDirectionalCircle/Node2D/AnalogDirectionalStick" method="_on_press"]
 [connection signal="released" from="AnalogCircleAnchor/AnalogDirectionalCircle/Node2D/AnalogDirectionalStick" to="AnalogCircleAnchor/AnalogDirectionalCircle/Node2D/AnalogDirectionalStick" method="_released"]
+[connection signal="pressed" from="AnalogVOvalAnchor/AnalogDirectionalVOval/Node2D/AnalogDirectionalVOvalStick" to="AnalogVOvalAnchor/AnalogDirectionalVOval/Node2D/AnalogDirectionalVOvalStick" method="_on_press"]
 [connection signal="released" from="AnalogVOvalAnchor/AnalogDirectionalVOval/Node2D/AnalogDirectionalVOvalStick" to="AnalogVOvalAnchor/AnalogDirectionalVOval/Node2D/AnalogDirectionalVOvalStick" method="_released"]
+[connection signal="pressed" from="AnalogHOvalAnchor/AnalogDirectionalHOval/Node2D/AnalogDirectionalHOvalStick" to="AnalogHOvalAnchor/AnalogDirectionalHOval/Node2D/AnalogDirectionalHOvalStick" method="_on_press"]
 [connection signal="released" from="AnalogHOvalAnchor/AnalogDirectionalHOval/Node2D/AnalogDirectionalHOvalStick" to="AnalogHOvalAnchor/AnalogDirectionalHOval/Node2D/AnalogDirectionalHOvalStick" method="_released"]
