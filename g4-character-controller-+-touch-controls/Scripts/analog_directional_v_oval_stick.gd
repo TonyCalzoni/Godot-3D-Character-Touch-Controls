@@ -5,25 +5,26 @@ var maxYDistance = 60
 var minYDistance = -60
 var stickCenter = Vector2(-38.5, 0.25)  # Our local 2D transform for center
 var dragging_oval = false
-var click_radius = 120
 var last_pos = stickCenter
+var touch_index = -1 # -1 is no touch, because null might cause issues
 
+@export var click_radius = 60
 @export var upMove = "ui_up"
 @export var downMove = "ui_down"
 
-func _input(event: InputEvent) -> void: #adjust this one, it's copied from the other
+func _input(event: InputEvent) -> void:
 	if event is InputEventScreenTouch:
 		#print_debug("Input event position: " + str(event.position) + ", sprite position: " + str(self.global_position))
 		if (event.position - self.global_position).length() < click_radius:
+			touch_index = event.index # store our multitouch event index for identifying the touch
 			# Start dragging if the click is on the sprite.
 			if not dragging_oval and pressed:
 				dragging_oval = true
-				#print_debug("Oval pressed")
+				#print_debug("Stick pressed")
 
-	if (event is InputEventScreenDrag) and dragging_oval:
+	if (event is InputEventScreenDrag) and (touch_index == event.index) and dragging_oval:
 		# While dragging, move the sprite with the mouse.
 		#position = event.position
-		
 		inputVector = event.screen_relative + last_pos
 		#print_debug("last_pos.y: " + str(last_pos.y))
 		if inputVector.y > maxYDistance:
@@ -62,4 +63,4 @@ func _released(): # We use the _released signal because the self.released is a c
 	# Zero virtual joystick
 	Input.action_release(upMove)
 	Input.action_release(downMove)
-	pass
+	return

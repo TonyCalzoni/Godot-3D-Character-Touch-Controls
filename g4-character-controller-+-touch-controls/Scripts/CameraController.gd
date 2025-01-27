@@ -5,6 +5,7 @@ extends Node3D
 @export var invertX:bool = false
 @export var invertY:bool = false
 @export var capture_mouse: bool = false
+#@export var use_mouse_click: bool = false
 @export var capture_joypad: bool = false
 @export var use_touch_stick: bool = true
 

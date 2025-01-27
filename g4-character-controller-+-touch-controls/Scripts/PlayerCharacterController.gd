@@ -11,6 +11,7 @@ class_name PlayerCharacterController
 
 
 enum state{WALK,RUN,JUMP,FALL,IDLE,ATTACK}
+@warning_ignore("unused_signal") # Silences the "UNUSED_SIGNAL" warning in debugger
 signal change_state(state)
 
 var camera:Node3D
@@ -46,7 +47,7 @@ func reparent_node(from,to):
 		return moved
 
 func _do_input_movement(delta):
-	#quit is escape (or pause button) is pressed
+	#quit if escape (or pause button) is pressed
 	if Input.is_action_just_pressed("ui_end") or Input.is_action_just_pressed("ui_cancel"):
 		get_tree().quit()
 		

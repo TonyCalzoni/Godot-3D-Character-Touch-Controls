@@ -20,39 +20,53 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="PauseTouchScreenButton" type="TouchScreenButton" parent="."]
-position = Vector2(2, 2)
-scale = Vector2(0.1, 0.1)
-texture_normal = ExtResource("1_drusa")
-texture_pressed = ExtResource("2_52rbg")
-action = "ui_end"
+[node name="AnalogCircleAnchor" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -40.0
+offset_right = 40.0
+grow_vertical = 0
 
-[node name="AnalogDirectionalCircle" type="Sprite2D" parent="."]
-position = Vector2(156, 646)
+[node name="AnalogDirectionalCircle" type="Sprite2D" parent="AnalogCircleAnchor"]
+position = Vector2(156, -114)
 scale = Vector2(0.25, 0.25)
 texture = ExtResource("3_ouq0g")
 
-[node name="Node2D" type="Node2D" parent="AnalogDirectionalCircle"]
+[node name="Node2D" type="Node2D" parent="AnalogCircleAnchor/AnalogDirectionalCircle"]
 position = Vector2(-150, -145)
 scale = Vector2(4, 4)
 
-[node name="AnalogDirectionalStick" type="TouchScreenButton" parent="AnalogDirectionalCircle/Node2D"]
+[node name="AnalogDirectionalStick" type="TouchScreenButton" parent="AnalogCircleAnchor/AnalogDirectionalCircle/Node2D"]
 scale = Vector2(0.25, 0.25)
 texture_normal = ExtResource("4_dibvr")
 texture_pressed = ExtResource("5_on00y")
 shape = SubResource("CircleShape2D_lmyg2")
 script = ExtResource("6_4olvw")
 
-[node name="AnalogDirectionalVOval" type="Sprite2D" parent="."]
-position = Vector2(1162, 643)
+[node name="AnalogVOvalAnchor" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -40.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="AnalogDirectionalVOval" type="Sprite2D" parent="AnalogVOvalAnchor"]
+position = Vector2(-78, -117)
 scale = Vector2(0.125, 0.25)
 texture = ExtResource("3_ouq0g")
 
-[node name="Node2D" type="Node2D" parent="AnalogDirectionalVOval"]
+[node name="Node2D" type="Node2D" parent="AnalogVOvalAnchor/AnalogDirectionalVOval"]
 position = Vector2(-150, -145)
 scale = Vector2(4, 4)
 
-[node name="AnalogDirectionalVOvalStick" type="TouchScreenButton" parent="AnalogDirectionalVOval/Node2D"]
+[node name="AnalogDirectionalVOvalStick" type="TouchScreenButton" parent="AnalogVOvalAnchor/AnalogDirectionalVOval/Node2D"]
 position = Vector2(-38.5, 0.25)
 scale = Vector2(0.5, 0.25)
 texture_normal = ExtResource("4_dibvr")
@@ -62,16 +76,28 @@ script = ExtResource("7_f5ka8")
 upMove = "cam_up"
 downMove = "cam_down"
 
-[node name="AnalogDirectionalHOval" type="Sprite2D" parent="."]
-position = Vector2(1162, 436)
+[node name="AnalogHOvalAnchor" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -40.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="AnalogDirectionalHOval" type="Sprite2D" parent="AnalogHOvalAnchor"]
+position = Vector2(-78, -324)
 scale = Vector2(0.25, 0.125)
 texture = ExtResource("3_ouq0g")
 
-[node name="Node2D" type="Node2D" parent="AnalogDirectionalHOval"]
+[node name="Node2D" type="Node2D" parent="AnalogHOvalAnchor/AnalogDirectionalHOval"]
 position = Vector2(-150, -145)
 scale = Vector2(4, 4)
 
-[node name="AnalogDirectionalHOvalStick" type="TouchScreenButton" parent="AnalogDirectionalHOval/Node2D"]
+[node name="AnalogDirectionalHOvalStick" type="TouchScreenButton" parent="AnalogHOvalAnchor/AnalogDirectionalHOval/Node2D"]
 position = Vector2(1.5, -39.75)
 scale = Vector2(0.25, 0.5)
 texture_normal = ExtResource("4_dibvr")
@@ -81,6 +107,19 @@ script = ExtResource("8_sp7ui")
 rightMove = "cam_right"
 leftMove = "cam_left"
 
-[connection signal="released" from="AnalogDirectionalCircle/Node2D/AnalogDirectionalStick" to="AnalogDirectionalCircle/Node2D/AnalogDirectionalStick" method="_released"]
-[connection signal="released" from="AnalogDirectionalVOval/Node2D/AnalogDirectionalVOvalStick" to="AnalogDirectionalVOval/Node2D/AnalogDirectionalVOvalStick" method="_released"]
-[connection signal="released" from="AnalogDirectionalHOval/Node2D/AnalogDirectionalHOvalStick" to="AnalogDirectionalHOval/Node2D/AnalogDirectionalHOvalStick" method="_released"]
+[node name="PauseAnchor" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="PauseTouchScreenButton" type="TouchScreenButton" parent="PauseAnchor"]
+position = Vector2(10, 10)
+scale = Vector2(0.1, 0.1)
+texture_normal = ExtResource("1_drusa")
+texture_pressed = ExtResource("2_52rbg")
+action = "ui_end"
+
+[connection signal="released" from="AnalogCircleAnchor/AnalogDirectionalCircle/Node2D/AnalogDirectionalStick" to="AnalogCircleAnchor/AnalogDirectionalCircle/Node2D/AnalogDirectionalStick" method="_released"]
+[connection signal="released" from="AnalogVOvalAnchor/AnalogDirectionalVOval/Node2D/AnalogDirectionalVOvalStick" to="AnalogVOvalAnchor/AnalogDirectionalVOval/Node2D/AnalogDirectionalVOvalStick" method="_released"]
+[connection signal="released" from="AnalogHOvalAnchor/AnalogDirectionalHOval/Node2D/AnalogDirectionalHOvalStick" to="AnalogHOvalAnchor/AnalogDirectionalHOval/Node2D/AnalogDirectionalHOvalStick" method="_released"]
