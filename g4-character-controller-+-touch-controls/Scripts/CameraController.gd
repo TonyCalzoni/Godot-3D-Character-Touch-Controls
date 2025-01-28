@@ -34,22 +34,24 @@ func _input(event):
 			lookv = event.velocity*0.00001
 		elif (_mouse_clicked):
 			lookv = event.screen_velocity*0.0001
+		
+	if !invertY: # yeah, it's technically reversed right now
+		lookv.y = lookv.y*-1
 	pass
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	if (use_touch_stick) or (capture_joypad):
-		lookv = Input.get_vector("cam_left","cam_right","cam_up","cam_down")*0.1
-		# Disable "Use Touch Stick" if you want to use mouse input for looking
+func _process(delta):	
+	if ((use_touch_stick) or (capture_joypad)):
+		lookv = Input.get_vector("cam_left","cam_right","cam_down","cam_up")*0.1
+
+	if (rotation_degrees.x < max_x_rot) and (lookv.y < 0): # Look down
+		rotate_object_local(Vector3.LEFT,lookv.y)
+	elif (rotation_degrees.x > min_x_rot) and (lookv.y > 0): # Look up
+		rotate_object_local(Vector3.LEFT,lookv.y)
 	
 	rotate_y(lookv.x if invertX else lookv.x*-1) # left/right
-	
-	if (rotation_degrees.x < max_x_rot) and Input.is_action_pressed("cam_down"):
-		rotate_object_local(Vector3.LEFT,(lookv.y if invertY else lookv.y*-1))
-	elif (rotation_degrees.x > min_x_rot) and Input.is_action_pressed("cam_up"):
-		rotate_object_local(Vector3.LEFT,(lookv.y if invertY else lookv.y*-1))
-	
+
 	if follow != null:
 		var goto = follow.position+Vector3(0,1,0)
 		position = position + ((goto-position)*delta*follow_speed)
