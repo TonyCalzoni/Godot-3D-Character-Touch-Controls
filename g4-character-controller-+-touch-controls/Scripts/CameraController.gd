@@ -42,9 +42,11 @@ func _input(event):
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):	
-	if ((use_touch_stick) or (capture_joypad)):
+	if ((use_touch_stick) or (capture_joypad)) and (lookv == Vector2.ZERO):
+		# Capture if _input(event) didn't set it from mouse input, to allow both to work at once for some reason
 		lookv = Input.get_vector("cam_left","cam_right","cam_down","cam_up")*0.1
-
+		# This is a compatibility hack since the touch stick can be held but not fire _input(event) events
+	
 	if (rotation_degrees.x < max_x_rot) and (lookv.y < 0): # Look down
 		rotate_object_local(Vector3.LEFT,lookv.y)
 	elif (rotation_degrees.x > min_x_rot) and (lookv.y > 0): # Look up

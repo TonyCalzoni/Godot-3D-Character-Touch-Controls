@@ -50,6 +50,10 @@ func _input(event: InputEvent) -> void:
 			newInputEvent.action = downMove
 			Input.action_release(upMove) # Release old input
 			inputStrength = inputVector.y / click_radius
+		
+		if inputStrength == null: # odd bug fix
+			inputStrength = 0
+		
 		newInputEvent.strength = inputStrength
 		#print_debug("Input: " + newInputEvent.action + " with a strength of: " + str(inputStrength))
 		newInputEvent.pressed = true
